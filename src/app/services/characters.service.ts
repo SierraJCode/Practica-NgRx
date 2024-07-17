@@ -11,7 +11,7 @@ export class CharactersService {
 
   constructor(private http: HttpClient) { }
 
-  getCharacters():Observable<any>{
-    return this.http.get<any>(`${this.apiUrl}`)
+  getCharacters(numPage: number):Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}/character/?page=${numPage}`)
   }
 }
