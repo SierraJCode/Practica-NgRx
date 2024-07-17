@@ -14,4 +14,9 @@ export class CharactersService {
   getCharacters(numPage: number):Observable<any>{
     return this.http.get<any>(`${this.apiUrl}/character/?page=${numPage}`)
   }
+
+  getCharacter(numPage:number, name: string):Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}/character/?page=${numPage}&name=${name}`)
+  }
+  
 }
