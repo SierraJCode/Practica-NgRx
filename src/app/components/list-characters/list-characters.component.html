@@ -1,6 +1,30 @@
-<div *ngFor="let character of characters">
+<div class="grid grid-cols-5 gap-6">
+    <div class="shadow-2xl rounded-xl" *ngFor="let character of characters">
+        <div class="">
+            <img class="rounded-xl" [src]="character.image" alt="">
+        </div>
+        <div class="font-semibold text-xl my-4 mx-2">{{ character.name }}</div>
+        <div class="mx-2 flex justify-between">
+            <span class="">{{ character.gender }}</span>
+            <button (click)="btnVisibility()" class="material-symbols-outlined">{{ visibility }}</button>
+        </div>
+        <div class="mx-2 mb-2 flex justify-between">
+            <img class="w-6 rounded-full" [src]="character.image" alt="">
+            <button class="material-symbols-outlined text-yellow-300">star</button>
+        </div>
     <div>
-        <!-- <li>{{ character.name }}</li> -->
-         {{ 0 }}
+</div>
+
     </div>
+</div>
+<div class="bg-slate-500 flex my-4">
+    <span class="mx-auto text-3xl ">{{ numPage }}</span>
+</div>
+<div class="flex justify-between">
+    <button (click)="btnPrev()" [disabled]="prevDisable" class="rounded-full w-20 px-5 py-1 mx-10 text-white bg-gray-500 border border-gray-500 hover:bg-gray-600">
+        Prev
+    </button>
+    <button (click)="btnNext()" [disabled]="nextDisable" class="rounded-full w-20 px-5 py-1 mx-10 text-white bg-gray-500 border border-gray-500 hover:bg-gray-600">
+        Next
+    </button>
 </div>
