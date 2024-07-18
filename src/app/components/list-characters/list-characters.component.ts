@@ -15,6 +15,7 @@ export class ListCharactersComponent {
 
   characters: any[] = [];
   numPage: number = 1;
+  pages: number = 0
   nextDisable: boolean = false;
   prevDisable: boolean = false;
   visibility: string = 'visibility';
@@ -38,6 +39,7 @@ export class ListCharactersComponent {
       return this.charactersService.getCharacters(this.numPage).subscribe(
         res => {
           this.characters = res.results
+          this.pages = res.info.pages;
           setTimeout(() =>{
             this.charactersCharged = true
           },1)
@@ -48,6 +50,7 @@ export class ListCharactersComponent {
       return this.charactersService.getCharacter(this.numPage, this.input).subscribe(
         res => {
           this.characters = res.results
+          this.pages = res.info.pages;
           setTimeout(() =>{
             this.charactersCharged = true
           },1)
@@ -68,10 +71,10 @@ export class ListCharactersComponent {
 
     this.prevDisable = false;
 
-    if(this.numPage < 41){
+    if(this.numPage < this.pages-1){
       this.numPage += 1;
       this.getCharacters()
-    }else if(this.numPage === 41){
+    }else if(this.numPage === this.pages-1){
       this.numPage += 1
       this.nextDisable = true
       this.getCharacters()
