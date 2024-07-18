@@ -17,7 +17,7 @@ export class ListCharactersComponent {
   numPage: number = 1;
   pages: number = 0
   nextDisable: boolean = false;
-  prevDisable: boolean = false;
+  prevDisable: boolean = true;
   visibility: string = 'visibility';
   star: string = 'star'
   charactersCharged: boolean = false;
@@ -29,8 +29,14 @@ export class ListCharactersComponent {
     this.getCharacters();
   }
 
-  restartPage(){
+  async restartPage(){
     this.numPage = 1
+    // if(this.numPage == this.pages){
+    //   this.nextDisable = true;
+    //   this.prevDisable = true;
+    // }else{
+    //   this.nextDisable = false;
+    // }
   }
 
   async getCharacters(){
@@ -49,8 +55,8 @@ export class ListCharactersComponent {
       this.charactersCharged = false;
       return this.charactersService.getCharacter(this.numPage, this.input).subscribe(
         res => {
-          this.characters = res.results
           this.pages = res.info.pages;
+          this.characters = res.results
           setTimeout(() =>{
             this.charactersCharged = true
           },1)
@@ -68,11 +74,9 @@ export class ListCharactersComponent {
   }
 
   btnNext(){
-
-    this.prevDisable = false;
-
     if(this.numPage < this.pages-1){
       this.numPage += 1;
+      this.prevDisable = false;
       this.getCharacters()
     }else if(this.numPage === this.pages-1){
       this.numPage += 1
@@ -83,11 +87,9 @@ export class ListCharactersComponent {
   }
 
   btnPrev(){
-
-    this.nextDisable = false
-
     if(this.numPage > 2){
       this.numPage -= 1;
+      this.nextDisable = false
       this.getCharacters()
     }else if(this.numPage === 2){
       this.numPage -= 1
