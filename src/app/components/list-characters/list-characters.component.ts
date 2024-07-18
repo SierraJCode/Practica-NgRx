@@ -28,8 +28,11 @@ export class ListCharactersComponent {
     this.getCharacters();
   }
 
-  async getCharacters(){
+  restartPage(){
     this.numPage = 1
+  }
+
+  async getCharacters(){
     if (this.input === ''){
       this.charactersCharged = false;
       return this.charactersService.getCharacters(this.numPage).subscribe(
