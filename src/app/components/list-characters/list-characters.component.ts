@@ -14,13 +14,13 @@ import { FormsModule } from '@angular/forms';
 export class ListCharactersComponent {
 
   characters: any[] = [];
-  allCharacters: any[] = []
   numPage: number = 1;
   nextDisable: boolean = false;
   prevDisable: boolean = false;
   visibility: string = 'visibility';
   star: string = 'star'
   charactersCharged: boolean = false;
+  input: string = ''
 
   constructor(private charactersService: CharactersService){}
 
@@ -28,21 +28,29 @@ export class ListCharactersComponent {
     this.getCharacters();
   }
 
-  searchCharacter(){
-    
-  }
-
   async getCharacters(){
-    this.charactersCharged = false;
-    return this.charactersService.getCharacters(this.numPage).subscribe(
-      res => {
-        this.characters = res.results
-        setTimeout(() =>{
-          this.charactersCharged = true
-        },1)
-        
-      }
-    )
+    this.numPage = 1
+    if (this.input === ''){
+      this.charactersCharged = false;
+      return this.charactersService.getCharacters(this.numPage).subscribe(
+        res => {
+          this.characters = res.results
+          setTimeout(() =>{
+            this.charactersCharged = true
+          },1)
+        }
+      )
+    } else {
+      this.charactersCharged = false;
+      return this.charactersService.getCharacter(this.numPage, this.input).subscribe(
+        res => {
+          this.characters = res.results
+          setTimeout(() =>{
+            this.charactersCharged = true
+          },1)
+        }
+      )
+    }
   }
 
   btnVisibility(){
