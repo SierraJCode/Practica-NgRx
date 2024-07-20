@@ -10,8 +10,8 @@
             {{ character.name }}
         </div>
         <div class="mx-3 mb-1 flex justify-between">
-            <span class="">ID: {{ character.id }}</span>
-            <button (click)="btnVisibility()" class="material-symbols-outlined">{{ visibility }}</button>
+            <span class="">ID: {{ character.showID ? character.id : '*****' }}</span>
+            <button (click)="showID(character)" class="material-symbols-outlined">{{ character.showID ? 'visibility' : 'visibility_off' }}</button>
         </div>
         <div class="mx-3 mb-3 flex justify-between">
             <img class="w-6 rounded-full" [src]="character.image" alt="">

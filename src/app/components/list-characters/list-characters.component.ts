@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../loading/loading.component';
 import { FormsModule } from '@angular/forms';
 import { FavoritesComponent } from '../favorites/favorites.component';
+import { Character } from '../interfaces/character.interface';
 
 @Component({
   selector: 'app-list-characters',
@@ -14,12 +15,11 @@ import { FavoritesComponent } from '../favorites/favorites.component';
 })
 export class ListCharactersComponent {
 
-  characters: any[] = [];
+  characters: Character[] = [];
   numPage: number = 1;
   pages: number = 0
   nextDisable: boolean = false;
   prevDisable: boolean = true;
-  visibility: string = 'visibility';
   star: string = 'star'
   charactersCharged: boolean = false;
   input: string = ''
@@ -45,7 +45,10 @@ export class ListCharactersComponent {
       this.charactersCharged = false;
       return this.charactersService.getCharacters(this.numPage).subscribe(
         res => {
-          this.characters = res.results
+          this.characters = res.results.map((character: Character) => ({
+            ...character,
+            showID: true
+          }));
           this.pages = res.info.pages;
           setTimeout(() =>{
             this.charactersCharged = true
@@ -66,12 +69,8 @@ export class ListCharactersComponent {
     }
   }
 
-  btnVisibility(){
-    if(this.visibility == 'visibility'){
-      this.visibility = 'visibility_off'
-    }else{
-      this.visibility = 'visibility'
-    }
+  showID(character: Character){
+    character.showID = !character.showID;
   }
 
   addFav(id: number){
