@@ -47,7 +47,8 @@ export class ListCharactersComponent {
         res => {
           this.characters = res.results.map((character: Character) => ({
             ...character,
-            showID: true
+            showID: true,
+            favorite: false,
           }));
           this.pages = res.info.pages;
           setTimeout(() =>{
