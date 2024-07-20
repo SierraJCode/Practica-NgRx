@@ -3,11 +3,12 @@ import { CharactersService } from '../../services/characters.service';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../loading/loading.component';
 import { FormsModule } from '@angular/forms';
+import { FavoritesComponent } from '../favorites/favorites.component';
 
 @Component({
   selector: 'app-list-characters',
   standalone: true,
-  imports: [CommonModule, LoadingComponent, FormsModule],
+  imports: [CommonModule, LoadingComponent, FormsModule, FavoritesComponent],
   templateUrl: './list-characters.component.html',
   styleUrl: './list-characters.component.css'
 })
@@ -71,6 +72,10 @@ export class ListCharactersComponent {
     }else{
       this.visibility = 'visibility'
     }
+  }
+
+  addFav(id: number){
+    
   }
 
   btnNext(){
