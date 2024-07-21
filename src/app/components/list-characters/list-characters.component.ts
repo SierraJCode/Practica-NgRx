@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CharactersService } from '../../services/characters.service';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../loading/loading.component';
@@ -11,83 +11,96 @@ import { Character } from '../interfaces/character.interface';
   standalone: true,
   imports: [CommonModule, LoadingComponent, FormsModule, FavoritesComponent],
   templateUrl: './list-characters.component.html',
-  styleUrls: ['./list-characters.component.css']
+  styleUrl: './list-characters.component.css'
 })
-export class ListCharactersComponent implements OnInit {
+export class ListCharactersComponent {
 
   characters: Character[] = [];
-  numPage = 1;
-  pages = 0;
-  nextDisable = false;
-  prevDisable = true;
-  charactersCharged = false;
-  input = '';
+  numPage: number = 1;
+  pages: number = 0
+  nextDisable: boolean = false;
+  prevDisable: boolean = true;
+  star: string = 'star'
+  charactersCharged: boolean = false;
+  input: string = ''
 
-  constructor(private charactersService: CharactersService) {}
+  constructor(private charactersService: CharactersService){}
 
-  ngOnInit(): void {
+  ngOnInit(){
     this.getCharacters();
   }
 
-  restartPage(): void {
-    this.numPage = 1;
-    this.getCharacters(); // Assuming you want to fetch characters after resetting page
+  async restartPage(){
+    this.numPage = 1
+    // if(this.numPage == this.pages){
+    //   this.nextDisable = true;
+    //   this.prevDisable = true;
+    // }else{
+    //   this.nextDisable = false;
+    // }
   }
 
-  getCharacters(): void {
-    this.charactersCharged = false;
-
-    const fetchCharacters$ = this.input === '' ?
-      this.charactersService.getCharacters(this.numPage) :
-      this.charactersService.getCharacter(this.numPage, this.input);
-
-    fetchCharacters$.subscribe(
-      res => {
-        this.characters = res.results.map((character: Character) => ({
-          ...character,
-          showID: true,
-          favorite: false
-        }));
-        this.pages = res.info.pages;
-
-        // Ensure the animation completes before updating the state
-        setTimeout(() => {
-          this.charactersCharged = true;
-          this.updatePaginationControls();
-        }, 100); // Adjust the timeout duration if needed
-      },
-      error => {
-        // Handle error
-        console.error('Error fetching characters:', error);
-        this.charactersCharged = false;
-      }
-    );
+  async getCharacters(){
+    if (this.input === ''){
+      this.charactersCharged = false;
+      return this.charactersService.getCharacters(this.numPage).subscribe(
+        res => {
+          this.characters = res.results.map((character: Character) => ({
+            ...character,
+            showID: true,
+            favorite: false,
+          }));
+          this.pages = res.info.pages;
+          setTimeout(() =>{
+            this.charactersCharged = true
+          },1)
+        }
+      )
+    } else {
+      this.charactersCharged = false;
+      return this.charactersService.getCharacter(this.numPage, this.input).subscribe(
+        res => {
+          this.pages = res.info.pages;
+          this.characters = res.results
+          setTimeout(() =>{
+            this.charactersCharged = true
+          },1)
+        }
+      )
+    }
   }
 
-  showID(character: Character): void {
+  showID(character: Character){
     character.showID = !character.showID;
   }
 
-  addFav(id: number): void {
-    // Implement add to favorites functionality
+  addFav(id: number){
+    
   }
 
-  btnNext(): void {
-    if (this.numPage < this.pages) {
-      this.numPage++;
-      this.getCharacters();
+  btnNext(){
+    if(this.numPage < this.pages-1){
+      this.numPage += 1;
+      this.prevDisable = false;
+      this.getCharacters()
+    }else if(this.numPage === this.pages-1){
+      this.numPage += 1
+      this.nextDisable = true
+      this.getCharacters()
+    }
+
+  }
+
+  btnPrev(){
+    if(this.numPage > 2){
+      this.numPage -= 1;
+      this.nextDisable = false
+      this.getCharacters()
+    }else if(this.numPage === 2){
+      this.numPage -= 1
+      this.prevDisable = true
+      this.getCharacters()
     }
   }
 
-  btnPrev(): void {
-    if (this.numPage > 1) {
-      this.numPage--;
-      this.getCharacters();
-    }
-  }
-
-  private updatePaginationControls(): void {
-    this.prevDisable = this.numPage === 1;
-    this.nextDisable = this.numPage >= this.pages;
-  }
 }
