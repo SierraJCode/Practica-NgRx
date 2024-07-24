@@ -25,16 +25,22 @@ export class ListCharactersComponent {
   star: string = 'star';
   charactersCharged: boolean = false;
   input: string = '';
-  characters$: Observable<Character[]>;
+  favorites$: Observable<Character[]>;
 
   constructor(
     private charactersService: CharactersService, 
-    private store: Store<{ characters: Character[] }>){
-      this.characters$ = store.select('characters')
+    private store: Store<{ favorites: Character[] }>) {
+      this.favorites$ = store.select('favorites');
     }
 
   ngOnInit() {
     this.getCharacters();
+    this.favorites$.subscribe(favorites => {
+      this.characters = this.characters.map(character => ({
+        ...character,
+        favorite: favorites.some(fav => fav.id === character.id)
+      }));
+    });
   }
 
   restartPage() {
@@ -54,6 +60,14 @@ export class ListCharactersComponent {
         showID: true,
         favorite: false,
       }));
+
+      this.favorites$.subscribe(favorites => {
+        this.characters = this.characters.map(character => ({
+          ...character,
+          favorite: favorites.some(fav => fav.id === character.id)
+        }));
+      });
+
       this.pages = res.info.pages;
       setTimeout(() => {
         this.charactersCharged = true;
@@ -66,15 +80,15 @@ export class ListCharactersComponent {
   }
 
   addFav(character: Character) {
-    character.favorite = true
     this.store.dispatch(addFav({ character }));
-    alert('Add')
+    character.favorite = true;
+    alert('Add');
   }
   
   removeFav(character: Character, id: number) {
-    character.favorite = false
     this.store.dispatch(removeFav({ id }));
-    alert('Remove')
+    character.favorite = false;
+    alert('Remove');
   }
 
   btnNext() {
