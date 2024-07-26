@@ -29,7 +29,7 @@ export class ListCharactersComponent {
 
   constructor(
     private charactersService: CharactersService, 
-    private store: Store<{ favorites: Character[] }>) {
+    private store: Store<{ favorites: Character[] }>){
       this.favorites$ = store.select('favorites');
     }
 
@@ -80,7 +80,8 @@ export class ListCharactersComponent {
   }
 
   addFav(character: Character) {
-    this.store.dispatch(addFav({ character }));
+    const newCharacter: Character = character;
+    this.store.dispatch(addFav({ character: newCharacter }));
     character.favorite = true;
     alert('Add');
   }
