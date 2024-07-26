@@ -7,7 +7,7 @@ export const initialState: Character[] = [];
 const _favoriteReducer = createReducer(
     initialState,
     on(addFav, (state, {character}) => [...state, character]),
-    on(removeFav, (state, { id }) => state.filter(character => character.id != id))
+    on(removeFav, (state, { id }) => state.filter(character => character.id !== id))
 );
 
 export function favoriteReducer(state: Character[] | undefined, action: Action){
